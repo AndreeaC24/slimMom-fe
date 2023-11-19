@@ -26,9 +26,9 @@ const AddDiary = () => {
       <form
         id="add-form"
         className="form m-3"
-        action="#"
-        method="POST"
-        role="form"
+        // action="#"
+        // method="POST"
+        // role="form"
       >
         <div className="column">
           <div className="col-10 form-group m-5">

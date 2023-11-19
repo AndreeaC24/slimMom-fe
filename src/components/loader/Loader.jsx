@@ -12,9 +12,9 @@ const override = {
   marginBottom: '25px',
 };
 
-export const Loader = () => {
-  let [loading, setLoading] = useState(true);
-  let [color, setColor] = useState('rgba(251, 135, 69, 1)');
+export const Loader = () => {// eslint-disable-next-line
+  let [loading, setLoading] = useState(true); // eslint-disable-next-line
+  let [color, setColor] = useState('rgba(251, 135, 69, 1)'); 
 
   return (
     <div className="sweet-loading">

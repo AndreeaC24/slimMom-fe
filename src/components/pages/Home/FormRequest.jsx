@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setFormData,
-  selectFormCompleted,
+  setFormData, 
   selectShowModal,
   selectFormData,
   setShowModal,
@@ -19,8 +18,7 @@ import { selectForbiddenProducts } from '../../../redux/form/forbiddenProductsSl
  
 export const FormReq = () => {
   const dispatch = useDispatch();
-  const formData = useSelector(selectFormData) || {};
-  const formCompleted = useSelector(selectFormCompleted);
+  const formData = useSelector(selectFormData) || {}; 
   const showModal = useSelector(selectShowModal);
   const forbiddenProducts = useSelector(selectForbiddenProducts);
 
@@ -42,14 +40,11 @@ export const FormReq = () => {
   
     if (!formData.weightD || formData.weightD.length < 2 || formData.weightD.length > 3) {
       errors.weightD = "Desired weight must be between 2 and 3 digits long";
-    } 
-  
+    }   
     setFormErrors(errors);
   
     return Object.values(errors).length === 0;
-  };
-  
-  
+  };  
   const handleShow = async () => {
     try { 
 
@@ -102,8 +97,8 @@ export const FormReq = () => {
         id="contact-form"
         className="form mt-5"
         action="#"
-        method="POST"
-        role="form"
+       // method="POST"
+       // role="form"
         onSubmit={e => e.preventDefault()} 
       >
         <div className="row">

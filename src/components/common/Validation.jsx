@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 // validarea nume
 export const validateName = name => {
   return name.length >= 3 ? '' : 'Name must be at least 3 characters long.';
