@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import PropagateLoader from 'react-spinners/PropagateLoader';
+import { useSelector } from 'react-redux';
+import { setLoading } from 'redux/loader/loaderSlice';
 
 const override = {
   position: 'fixed',
@@ -13,20 +15,20 @@ const override = {
 };
 
 export const Loader = () => {// eslint-disable-next-line
-  let [loading, setLoading] = useState(true); // eslint-disable-next-line
+ // let [loading, setLoading] = useState(true); // eslint-disable-next-line
   let [color, setColor] = useState('rgba(251, 135, 69, 1)'); 
+  const loaderState = useSelector(setLoading);
 
+  console.log('Starea loader-ului:', loaderState);
   return (
     <div className="sweet-loading">
       <PropagateLoader
         color={color}
         cssOverride={override}
-        loading={loading}
+        loading={loaderState}
         size={30}
         speedMultiplier={1}
       />
     </div>
   );
-};
-
-export default Loader;
+}; 

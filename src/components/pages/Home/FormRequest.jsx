@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  setFormData, 
+  setFormData,
   selectShowModal,
   selectFormData,
   setShowModal,
@@ -15,52 +15,72 @@ import {
 } from '../../../redux/form/operationsForm';
 
 import { selectForbiddenProducts } from '../../../redux/form/forbiddenProductsSlice';
- 
+
 export const FormReq = () => {
   const dispatch = useDispatch();
-  const formData = useSelector(selectFormData) || {}; 
+  const formData = useSelector(selectFormData) || {};
   const showModal = useSelector(selectShowModal);
   const forbiddenProducts = useSelector(selectForbiddenProducts);
-
+  const [calculatedBMR, setCalculatedBMR] = useState('');
   const [formErrors, setFormErrors] = useState({});
   const isFormValid = () => {
     const errors = {};
-  
-    if (!formData.height || formData.height.length !== 3) {
-      errors.height = "Height must be 3 digits long - in cm";
-    }
-  
-    if (!formData.age || formData.age.length < 1 || formData.age.length > 2) {
-      errors.age = "Age must be between 1 and 2 digits long";
-    }
-  
-    if (!formData.weightC || formData.weightC.length < 2 || formData.weightC.length > 3) {
-      errors.weightC = "Current weight must be between 2 and 3 digits long";
-    }
-  
-    if (!formData.weightD || formData.weightD.length < 2 || formData.weightD.length > 3) {
-      errors.weightD = "Desired weight must be between 2 and 3 digits long";
-    }   
-    setFormErrors(errors);
-  
-    return Object.values(errors).length === 0;
-  };  
-  const handleShow = async () => {
-    try { 
 
+    if (!formData.height || formData.height.length !== 3) {
+      errors.height = 'Height must be 3 digits long - in cm';
+    }
+
+    if (!formData.age || formData.age.length < 1 || formData.age.length > 2) {
+      errors.age = 'Age must be between 1 and 2 digits long';
+    }
+
+    if (
+      !formData.weightC ||
+      formData.weightC.length < 2 ||
+      formData.weightC.length > 3
+    ) {
+      errors.weightC = 'Current weight must be between 2 and 3 digits long';
+    }
+
+    if (
+      !formData.weightD ||
+      formData.weightD.length < 2 ||
+      formData.weightD.length > 3
+    ) {
+      errors.weightD = 'Desired weight must be between 2 and 3 digits long';
+    }
+    setFormErrors(errors);
+
+    return Object.values(errors).length === 0;
+  };
+/***BMR **  */
+  const calculateBMR = () => {
+    const { weightC, height, age } = formData;
+
+    if (weightC && height && age) {
+      const bmr = 10 * weightC + 6.25 * height - 5 * age + 5;
+      setCalculatedBMR(bmr);
+    } else {
+      console.error('Missing data for BMR calculation');
+    }
+  };
+
+  const handleShow = async () => {
+    try {
       if (
         isFormValid() &&
         formData.bloodType &&
         formData.bloodType.length === 4
-      ) {  
+      ) {
         dispatch(saveFormData(formData));
-        dispatch(fetchForbiddenProducts(formData.bloodType));  
+        dispatch(fetchForbiddenProducts(formData.bloodType));
+        calculateBMR();
       } else {
-        toast.error('Please complete all your fields'); 
+        toast.error('Please complete all your fields');
       }
     } catch (error) {
-      toast.error('Please complete all your fields'); 
-       }
+      toast.error('Please complete all your fields');
+    }
   };
 
   const handleClose = () => {
@@ -71,10 +91,10 @@ export const FormReq = () => {
     const { name, value } = e.target;
 
     if (name === 'bloodType') {
-      const index = parseInt(value) - 1; 
+      const index = parseInt(value) - 1;
       const updatedBloodType = Array.isArray(formData.bloodType)
         ? [...formData.bloodType]
-        : [false, false, false, false]; 
+        : [false, false, false, false];
       for (let i = 0; i < updatedBloodType.length; i++) {
         updatedBloodType[i] = i === index;
       }
@@ -82,8 +102,8 @@ export const FormReq = () => {
       dispatch(setFormData({ ...formData, [name]: updatedBloodType }));
     } else {
       dispatch(setFormData({ ...formData, [name]: value }));
-    } 
-  }; 
+    }
+  };
   return (
     <div className="container">
       <div className="row">
@@ -97,16 +117,18 @@ export const FormReq = () => {
         id="contact-form"
         className="form mt-5"
         action="#"
-       // method="POST"
-       // role="form"
-        onSubmit={e => e.preventDefault()} 
+        // method="POST"
+        // role="form"
+        onSubmit={e => e.preventDefault()}
       >
         <div className="row">
           <div className="col-12 col-md-6 form-container">
             <div className="form-group m-5">
-            <input
+              <input
                 type="text"
-                className={`form-control-custom ${formErrors.height ? 'error' : ''}`}
+                className={`form-control-custom ${
+                  formErrors.height ? 'error' : ''
+                }`}
                 id="height"
                 name="height"
                 placeholder="Height *"
@@ -115,12 +137,16 @@ export const FormReq = () => {
                 value={formData.height || ''}
                 onChange={handleInputChange}
               />
-                  {formErrors.height && <div className="error-message">{formErrors.height}</div>}
-          </div>
+              {formErrors.height && (
+                <div className="error-message">{formErrors.height}</div>
+              )}
+            </div>
             <div className="form-group m-5">
               <input
                 type="text"
-                className={`form-control-custom ${formErrors.age ? 'error' : ''}`}
+                className={`form-control-custom ${
+                  formErrors.age ? 'error' : ''
+                }`}
                 id="age"
                 name="age"
                 placeholder="Age *"
@@ -129,13 +155,16 @@ export const FormReq = () => {
                 value={formData.age || ''}
                 onChange={handleInputChange}
               />
-               {formErrors.age && <div className="error-message">{formErrors.age}</div>}
-
+              {formErrors.age && (
+                <div className="error-message">{formErrors.age}</div>
+              )}
             </div>
             <div className="form-group m-5">
               <input
                 type="text"
-                className={`form-control-custom ${formErrors.weightC ? 'error' : ''}`}
+                className={`form-control-custom ${
+                  formErrors.weightC ? 'error' : ''
+                }`}
                 id="weightC"
                 name="weightC"
                 placeholder="Current Weight *"
@@ -144,15 +173,18 @@ export const FormReq = () => {
                 value={formData.weightC || ''}
                 onChange={handleInputChange}
               />
-               {formErrors.weightC && <div className="error-message">{formErrors.weightC}</div>}
-
+              {formErrors.weightC && (
+                <div className="error-message">{formErrors.weightC}</div>
+              )}
             </div>
           </div>
           <div className="col-12 col-md-6 cols-2 form-container">
             <div className="form-group m-5">
               <input
                 type="text"
-                className={`form-control-custom ${formErrors.weightD ? 'error' : ''}`}
+                className={`form-control-custom ${
+                  formErrors.weightD ? 'error' : ''
+                }`}
                 id="weightD"
                 name="weightD"
                 placeholder="Desired weight *"
@@ -161,10 +193,11 @@ export const FormReq = () => {
                 value={formData.weightD || ''}
                 onChange={handleInputChange}
               />
-               {formErrors.weightD && <div className="error-message">{formErrors.weightD}</div>}
-
+              {formErrors.weightD && (
+                <div className="error-message">{formErrors.weightD}</div>
+              )}
             </div>
-            <div className="form-group m-5"> 
+            <div className="form-group m-5">
               <input
                 type="text"
                 className="form-control-custom"
@@ -248,7 +281,10 @@ export const FormReq = () => {
             <h2 className="text-title-center font-weight-bold">
               Your recommended daily calorie intake is
             </h2>
-            {/* <span className="calories text-center">{filteredCalories}</span> */}
+            {calculatedBMR !== null && (
+              <span className="calories text-center">{calculatedBMR} kcal</span>
+            )}
+
             <p className="notFood pt-3 mt-5">Foods you should not eat</p>
             <ol className="notFood-list">
               {forbiddenProducts.slice(0, 4).map((product, index) => (
