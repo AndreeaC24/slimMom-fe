@@ -17,7 +17,7 @@ ReactDOM.render(
   <React.StrictMode>
     <React.Fragment>
       <Provider store={store}>
-        <BrowserRouter basename="/slim-mom">
+        <BrowserRouter basename="/slimMom-fe">
           <PersistGate loading={null} persistor={persistor}>
             <App />
           </PersistGate>
