@@ -14,10 +14,10 @@ const override = {
   marginBottom: '25px',
 };
 
-export const Loader = () => {// eslint-disable-next-line
- // let [loading, setLoading] = useState(true); // eslint-disable-next-line
-  let [color, setColor] = useState('rgba(251, 135, 69, 1)'); 
+export const Loader = () => {
   const loaderState = useSelector(setLoading);
+// eslint-disable-next-line
+  let [color, setColor] = useState('rgba(251, 135, 69, 1)'); 
 
   console.log('Starea loader-ului:', loaderState);
   return (
