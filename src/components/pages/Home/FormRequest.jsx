@@ -1,5 +1,5 @@
 //import React, { useState } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ export const FormReq = () => {
   const forbiddenProducts = useSelector(selectForbiddenProducts);
   const [calculatedBMR, setCalculatedBMR] = useState('');
   const [formErrors, setFormErrors] = useState({});
-  const isLoggedIn = useSelector(selectIsLoggedIn);
+ // const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const isFormValid = () => {
     const errors = {};
