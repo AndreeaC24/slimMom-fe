@@ -77,7 +77,7 @@ export const FormReq = () => {
         formData.bloodType &&
         formData.bloodType.length === 4
       ) {
-        await dispatch(saveFormData(formData));
+        dispatch(saveFormData(formData));
         dispatch(fetchForbiddenProducts(formData.bloodType));
         calculateBMR();
       } else {
