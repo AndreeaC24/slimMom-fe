@@ -18,7 +18,7 @@ import {
 
 import { selectForbiddenProducts } from '../../../redux/form/forbiddenProductsSlice';
 
-import { selectIsLoggedIn } from '../../../redux/auth/selectorsAuth';
+//import { selectIsLoggedIn } from '../../../redux/auth/selectorsAuth';
 export const FormReq = () => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData) || {};
@@ -77,7 +77,7 @@ export const FormReq = () => {
         formData.bloodType &&
         formData.bloodType.length === 4
       ) {
-        dispatch(saveFormData(formData));
+        await dispatch(saveFormData(formData));
         dispatch(fetchForbiddenProducts(formData.bloodType));
         calculateBMR();
       } else {
