@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+//import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { Button, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +18,7 @@ import {
 
 import { selectForbiddenProducts } from '../../../redux/form/forbiddenProductsSlice';
 
+import { selectIsLoggedIn } from '../../../redux/auth/selectorsAuth';
 export const FormReq = () => {
   const dispatch = useDispatch();
   const formData = useSelector(selectFormData) || {};
@@ -23,6 +26,8 @@ export const FormReq = () => {
   const forbiddenProducts = useSelector(selectForbiddenProducts);
   const [calculatedBMR, setCalculatedBMR] = useState('');
   const [formErrors, setFormErrors] = useState({});
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
   const isFormValid = () => {
     const errors = {};
 
@@ -53,13 +58,13 @@ export const FormReq = () => {
 
     return Object.values(errors).length === 0;
   };
-/***BMR **  */
+  /***BMR **  */
   const calculateBMR = () => {
     const { weightC, height, age } = formData;
 
     if (weightC && height && age) {
       const bmr = 10 * weightC + 6.25 * height - 5 * age + 5;
-      setCalculatedBMR(bmr);
+      setCalculatedBMR(bmr.toFixed(0));
     } else {
       console.error('Missing data for BMR calculation');
     }
@@ -72,14 +77,14 @@ export const FormReq = () => {
         formData.bloodType &&
         formData.bloodType.length === 4
       ) {
-        dispatch(saveFormData(formData));
+        await dispatch(saveFormData(formData));
         dispatch(fetchForbiddenProducts(formData.bloodType));
         calculateBMR();
       } else {
         toast.error('Please complete all your fields');
       }
     } catch (error) {
-      toast.error('Please complete all your fields');
+      toast.error('Error: Please complete all your fields');
     }
   };
 
